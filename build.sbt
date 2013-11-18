@@ -2,7 +2,7 @@ import com.typesafe.startscript.StartScriptPlugin
 
 seq(StartScriptPlugin.startScriptForClassesSettings: _*)
 
-organization  := "com.example"
+organization  := "com.ingi"
 
 version       := "0.1"
 
