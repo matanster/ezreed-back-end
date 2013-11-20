@@ -26,18 +26,22 @@ class MyServiceActor extends Actor with MyService {
 
 // this trait defines our service behavior independently from the service actor
 trait MyService extends HttpService {
+  
+  akka.event.Logging.Debug
 
   val myRoute =
     path("") {
       get {
-        respondWithMediaType(`text/html`) { // XML is marshalled to `text/xml` by default, so we simply override here
-          complete {
-            <html>
+        logRequestResponse("some logging") {
+	        respondWithMediaType(`text/html`) { // XML is marshalled to `text/xml` by default, so we simply override here
+	          complete {
+	            <html>
               <body>
                 <h1>This is the Spray.io based back-end server</h1>
               </body>
             </html>
-          }
+	          }
+	        }
         }
       }
     }
