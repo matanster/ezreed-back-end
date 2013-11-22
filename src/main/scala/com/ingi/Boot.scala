@@ -12,8 +12,9 @@ object Boot extends App {
   // we need an ActorSystem to host our application in
 
   implicit val system = ActorSystem("on-spray-can")
+
+  //for logging outside the actors:
   //implicit val system = ActorSystem("on-spray-can", ConfigFactory.load.getConfig("akka"))
-  
   //val log = Logging.getLogger(system, this)
   //log.info("Hi!")
 
