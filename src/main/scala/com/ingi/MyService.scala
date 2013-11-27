@@ -6,6 +6,7 @@ import spray.http._
 import MediaTypes._
 import akka.event.Logging
 import spray.util.LoggingContext
+import scala.io.Source
 
 // we don't implement our route structure directly in the service actor because
 // we want to be able to test it independently, without having to spin up an actor
@@ -47,11 +48,13 @@ trait MyService extends HttpService {
     } ~
     path("serve-local-file") {
       get {
+        logRequestResponse("Request & response logging", Logging.InfoLevel) {
             parameters('location) { (location) =>
                 getFromFile(location)
             	//complete(s"$location") // just send back the requested file location 
         	}
-      	}
+        }
+      }
     } ~
     path("process-file") {
       get {
@@ -62,7 +65,10 @@ trait MyService extends HttpService {
     }
     
     def processFile(location: String /* ctx: RequestContext */): String = {
-      ""
+      val html = Source.fromFile(location).mkString
+      //val xhtml = scala.xml.Xhtml.toXhtml(html) 
+      //scala.xml.Xhtml.
+      "finished processing"
     }
     
 }
