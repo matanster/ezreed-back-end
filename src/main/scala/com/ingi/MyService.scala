@@ -31,7 +31,7 @@ trait MyService extends HttpService {
   //akka.event.Logging.Debug
 
   val myRoute =
-    path("") {
+    path("none") {
       get {
         logRequestResponse("Request & response logging", Logging.InfoLevel) {
 	        respondWithMediaType(`text/html`) { // XML is marshalled to `text/xml` by default, so we simply override here
@@ -46,11 +46,11 @@ trait MyService extends HttpService {
         }
       }
     } ~
-    path("serve-local-file") {
+    path("") {
       get {
         logRequestResponse("Request & response logging", Logging.InfoLevel) {
             parameters('location) { (location) =>
-                getFromFile(location)
+                getFromFile("../front-end/local-copies/html-converted/" + location)
             	//complete(s"$location") // just send back the requested file location 
         	}
         }
