@@ -33,7 +33,7 @@ trait MyService extends HttpService {
   val myRoute =
     path("none") {
       get {
-        logRequestResponse("Request & response logging", Logging.InfoLevel) {
+        logRequestResponse("Request & response logging for root path", Logging.InfoLevel) {
 	        respondWithMediaType(`text/html`) { // XML is marshalled to `text/xml` by default, so we simply override here
 	          complete {
 	            <html>
@@ -46,11 +46,18 @@ trait MyService extends HttpService {
         }
       }
     } ~
-    path("") {
+    pathPrefix("serve-original-as-html" / RestPath) { subPath =>
       get {
-        logRequestResponse("Request & response logging", Logging.InfoLevel) {
-            parameters('location) { (location) =>
-                getFromFile("../front-end/local-copies/html-converted/" + location)
+        logRequestResponse("Request & response logging for serve-original-as-html", Logging.InfoLevel) {
+            getFromFile("../local-copies/html-converted/" + subPath)
+        }
+      }
+    } ~
+    path("old-serve-original-as-html") {
+      get {
+        logRequestResponse("Request & response logging for serve-original-as-html", Logging.InfoLevel) {
+            parameters('filename) { (filename) =>
+                getFromFile("../local-copies/html-converted/" + filename)
             	//complete(s"$location") // just send back the requested file location 
         	}
         }
@@ -62,13 +69,20 @@ trait MyService extends HttpService {
                 complete(processFile(location))
         	}
       	}
+    } ~ 
+    get { 
+      // this is only for logging requests for unhandled paths
+      // before spray returns the 404
+      logRequestResponse("Request & response logging for undefined resource request", Logging.InfoLevel) {
+     	reject
+      }
     }
+      
     
     def processFile(location: String /* ctx: RequestContext */): String = {
       val html = Source.fromFile(location).mkString
       //val xhtml = scala.xml.Xhtml.toXhtml(html) 
       //scala.xml.Xhtml.
       "finished processing"
-    }
-    
+    } 
 }
