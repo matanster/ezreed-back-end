@@ -53,7 +53,7 @@ trait MyService extends HttpService {
         }
       }
     } ~
-    path("old-serve-original-as-html") {
+    path("parameter-extraction-example-code") {
       get {
         logRequestResponse("Request & response logging for serve-original-as-html", Logging.InfoLevel) {
             parameters('filename) { (filename) =>
@@ -63,12 +63,10 @@ trait MyService extends HttpService {
         }
       }
     } ~
-    path("process-file") {
+    pathPrefix("process-file" / RestPath) { subPath =>
       get {
-            parameters('location) { (location) =>
-                complete(processFile(location))
-        	}
-      	}
+        complete(processFile("../local-copies/html-converted/" + subPath))
+      }
     } ~ 
     get { 
       // this is only for logging requests for unhandled paths
