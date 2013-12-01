@@ -75,12 +75,12 @@ trait MyService extends HttpService {
      	reject
       }
     }
-      
     
     def processFile(location: String /* ctx: RequestContext */): String = {
       val html = Source.fromFile(location).mkString
-      //val xhtml = scala.xml.Xhtml.toXhtml(html) 
-      //scala.xml.Xhtml.
+      val parseString = """<div((?!div).)*</div>""".r // regex for all divs that don't contain inner divs
+      val extractedDivs = parseString.findAllMatchIn(html) // extract those divs
+      
       "finished processing"
     } 
 }
