@@ -77,9 +77,13 @@ trait MyService extends HttpService {
     }
     
     def processFile(location: String /* ctx: RequestContext */): String = {
-      val html = Source.fromFile(location).mkString
+      val sourceHtml = Source.fromFile(location).mkString
       val parseString = """<div((?!div).)*</div>""".r // regex for all divs that don't contain inner divs
-      val extractedDivs = parseString.findAllMatchIn(html) // extract those divs
+      val extractedDivs = parseString.findAllMatchIn(sourceHtml) // extract those divs
+      
+      while (extractedDivs.hasNext) {
+        
+      }
       
       "finished processing"
     } 
